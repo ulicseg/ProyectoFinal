@@ -36,7 +36,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ulielian@outlook.com'
-EMAIL_HOST_PASSWORD = 'ulises44086174'
+EMAIL_HOST_PASSWORD = '1234567890'
 
 SITE_NAME = 'CyberShield'
 
