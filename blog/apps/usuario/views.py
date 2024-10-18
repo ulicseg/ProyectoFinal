@@ -1,11 +1,14 @@
 from .forms import RegistroUsuarioForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import Group
-
+from django.views import View
+from django.contrib.auth import logout
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.models import User
 # Create your views here.
 
 
@@ -29,10 +32,37 @@ class LoginUsuario(LoginView):
 
         return self.request.GET.get('next', reverse('index'))
     
-class LogoutUsuario(LogoutView):
-    template_name = 'registration/logout.html'
+class LogoutUsuario(View):
+    def get(self, request):
+        logout(request)
+        messages.success(request, 'Logout exitoso')
+        return redirect(reverse('apps.usuario:login'))
 
     def get_success_url(self):
         messages.success(self.request, 'Logout exitoso')
 
         return reverse('apps.usuario:login')
+    
+class UsuarioListView(LoginRequiredMixin,ListView):
+    model = User
+    template_name = 'usuario/usuario_list.html'
+    context_object_name = 'usuarios'
+
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.exclude(is_superuser=True)
+        return queryset
+    
+class UsuarioDetailView(LoginRequiredMixin,ListView):
+    model = User
+    template_name = 'usuario/usuario_detail.html'
+    context_object_name = 'usuario'
+
+
+class UsuarioDeleteView(LoginRequiredMixin,DeleteView):
+    model = User
+    template_name = 'usuario/eliminar_usuario.html'
+    context_object_name = 'usuario'
+    success_url = reverse_lazy('apps.usuario:usuario_list')
+    

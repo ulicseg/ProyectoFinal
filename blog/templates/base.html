@@ -110,8 +110,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'apps.contacto:contacto' %}"><i class="fas fa-envelope"></i> Contacto</a>
                     </li>
-                    {% if user.is_authenticated %}
-                    <li><a href="#">{{user.username}}: Logout</a>
+                    <div class="dropdown">
+                        {% if user.is_authenticated %}
+                        <li><a href="{% url 'apps.usuario:logout' %}">{{user.username}}: Logout</a>
                         <div class="dropdown-content">
                             <table>
                                 <tr>
@@ -127,16 +128,14 @@
                                 </tr>
                             </table>
                         </div>
-                        <form method="post" action="{% url 'apps.usuario:logout' %}">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-cyber me-2">{{user.username}} - Cerrar Sesión</button>
-                        </form>
-                    </li>
-                    {% else %}
-                    <li>
-                        <a href="{% url 'apps.usuario:login' %}" class="btn btn-outline-cyber me-2">Iniciar Sesión</a>
-                    </li>
+
+                        </li>
+                        {% else %}
+                        <li>
+                            <a href="{% url 'apps.usuario:login' %}" class="btn btn-outline-cyber me-2">Iniciar Sesión</a>
+                        </li>
                     {% endif %}
+                    </div>
                 </ul>
             </div>
         </div>
