@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load colaborador_tags %}
+
+{% block title %}Eliminación de post{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Eliminar Post</h2>
+    <p>¿Estás seguro de que quieres eliminar el post "{{ object.titulo }}"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
+        <a href="{% url 'posts:post_detail' id=object.id %}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}

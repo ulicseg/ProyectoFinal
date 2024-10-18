@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load colaborador_tags %}
 <!DOCTYPE html>
 <html lang="es-ar">
 <head>
@@ -111,10 +111,25 @@
                         <a class="nav-link" href="{% url 'apps.contacto:contacto' %}"><i class="fas fa-envelope"></i> Contacto</a>
                     </li>
                     {% if user.is_authenticated %}
-                    <li>
+                    <li><a href="#">{{user.username}}: Logout</a>
+                        <div class="dropdown-content">
+                            <table>
+                                <tr>
+                                    {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+                                    <td><a href="{% url 'posts:crear_post' %}">Lista de Usuarios</a></td>
+                                    {% endif %}
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Lista de categorias</a></td>
+                                </tr>
+                                <tr></tr>
+                                    <td><a href="#">Lista de posts</a></td>
+                                </tr>
+                            </table>
+                        </div>
                         <form method="post" action="{% url 'apps.usuario:logout' %}">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-outline-cyber me-2">Cerrar Sesión</button>
+                            <button type="submit" class="btn btn-outline-cyber me-2">{{user.username}} - Cerrar Sesión</button>
                         </form>
                     </li>
                     {% else %}

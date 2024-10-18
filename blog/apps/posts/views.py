@@ -84,7 +84,7 @@ class CategoriaCreateView(LoginRequiredMixin,CreateView):
         if next_url:
             return next_url
         else:
-            return reverse_lazy('posts:posts_create')
+            return reverse_lazy('posts:crear_post')
 
 class CategoriaListView(ListView):
     model = Categoria
