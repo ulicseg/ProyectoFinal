@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load colaborador_tags %}
+
+{% block content %}
+
+{% if user.is_superuser or request.user|has_group:'Colaborador' %}
+<div class="container-fluid" style="margin-top: 200px;">
+
+<div class="container-fluid" style="margin-top: 300px;">
+    <a id="boton_post" href="{% url 'posts:crear_post' %}">Crear nuevo post</a>
+</div>
+{% endif %}
+
+
+
+
+    {% for post in posts %}
+        <br>
+        <li>{{ i.titulo }}</li>
+        <li>{{ i.subtitulo }}</li>
+        <li>{{ i.categoria }}</li>
+        <br>
+        <a href="{% url 'posts:post_detail' post.id %}">Leer más</a>
+
+        {% empty %}
+            <li>No hay registros</li>
+
+    {% endfor %}
+
+
+    <br>
+    <h1>ahora estamos en otro template</h1>
+
+</div>
+
+{% endblock %}

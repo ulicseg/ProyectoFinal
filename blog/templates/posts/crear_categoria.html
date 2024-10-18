@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+    <div class="container-fluid" style="margin-top: 200px;">
+        <h1>Agregar una nueva categoria</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Agregar">
+        </form>
+        <div class="container-fluid" style="margin-top: 20px;">
+            <a id="boton_post" href="{% url 'posts:categoria_list' %}">Listar todas las categorias</a>
+        </div>
+    </div>
+</center>
+
+{% endblock %}

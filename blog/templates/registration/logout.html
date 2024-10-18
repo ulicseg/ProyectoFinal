@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<title>{% block title %} Cerrar sesión {% endblock %}</title>
+
+{% block content %}
+
+<center>
+<div class="container" style="margin-top: 370px;">
+    <dir class="messages">
+        {% for message in messages %}
+            <table {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</table>
+        {% endfor %}
+    </dir>
+
+</div>
+</center>
+{% endblock %}
