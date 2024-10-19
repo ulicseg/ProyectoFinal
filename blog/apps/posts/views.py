@@ -8,7 +8,6 @@ from django.urls import reverse_lazy
 
 # Create your views here.
 
-
 class PostListView(ListView):
     model = Post
     template_name = "posts/posts.html" 
@@ -29,7 +28,7 @@ class PostListView(ListView):
         context = super().get_context_data(**kwargs)
         context['orden'] = self.request.GET.get('orden', 'reciente')
         return context
-  
+
 class PostDetailView(DetailView):
     model = Post
     template_name = 'posts/posts_individual.html'

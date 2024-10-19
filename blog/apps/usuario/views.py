@@ -66,3 +66,22 @@ class UsuarioDeleteView(LoginRequiredMixin,DeleteView):
     context_object_name = 'usuario'
     success_url = reverse_lazy('apps.usuario:usuario_list')
     
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        colaborador_group= Group.objects.get(name='Colaborador')
+        es_colaborador = colaborador_group in self.object.groups.all()
+        context['es_colaborador'] = es_colaborador
+        return super().get_context_data(**kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        eliminar_comentarios = request.POST.get('eliminar_comentarios', False)
+        eliminar_posts = request.POST.get('eliminar_posts', False)
+        self.object = self.get_object()
+        if eliminar_comentarios:
+            Comentario.objects.filter(usuario=self.object).delete()
+
+        if eliminar_posts:
+            Post.objects.filter(usuario=self.object).delete()
+        messages.success(request, f'Usuario {self.object.username} eliminado correctamente')
+        return super().post(request, *args, **kwargs)
+

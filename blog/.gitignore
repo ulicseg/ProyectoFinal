@@ -1,11 +1,71 @@
-     *.pyc
-     __pycache__
-     db.sqlite3
-     .env
-     .venv
-     env/
-     venv/
-     ENV/
-     env.bak/
-     venv.bak/
-     .DS_Store
+# Entornos virtuales
+env/
+venv/
+.env
+.venv
+ENV/
+env.bak/
+venv.bak/
+
+# Archivos de Python
+*.py[cod]
+*$py.class
+__pycache__/
+
+# Django
+*.log
+db.sqlite3
+db.sqlite3-journal
+media/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# IDEs y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Archivos de migración, excepto __init__.py
+**/migrations/*.py
+!**/migrations/__init__.py
+
+# Archivos estáticos recopilados
+static/
+
+# Archivos de caché
+*.cache
+
+# Archivos de prueba de cobertura
+.coverage
+.coverage.*
+htmlcov/
+
+# Archivos de distribución / empaquetado
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+
+# Archivos de documentación
+docs/_build/
+
+# Archivos de PyInstaller
+*.manifest
+*.spec
+
+# Archivos de Jupyter Notebook
+.ipynb_checkpoints
+
+# Archivos de ambiente
+.env
+.env.local
+.env.*.local
+
+# Archivos temporales
+*.bak
+*.tmp
+*.temp

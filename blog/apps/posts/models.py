@@ -21,6 +21,7 @@ class Post(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, default="sin categoria")
     imagen = models.ImageField(null=True,blank=True,upload_to='media', default='static/post_default.jpg')
     publicado = models.BooleanField(default=timezone.now)
+    autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     class Meta:
         ordering = ['-publicado']
