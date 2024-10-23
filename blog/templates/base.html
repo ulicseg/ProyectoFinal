@@ -7,139 +7,209 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}CyberShield{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #00ff00;
+            --secondary-color: #003300;
+            --background-color: #001a00;
+            --text-color: #e0ffe0;
+            --hover-color: #00cc00;
+        }
+
         body {
-            background-color: #0a0a0a;
-            color: #33ff33;
-            font-family: 'Courier New', monospace;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
+
         .navbar {
-            background-image: url("{% static 'img/info.jpg' %}");
-            background-size: cover;
-            background-position: center;
-            padding: 1rem 0;
+            background-color: rgba(0, 26, 0, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--primary-color);
         }
-        .navbar::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.4));
-            z-index: 1;
-        }
-        .navbar-brand, .nav-link, .navbar-nav, .navbar-collapse {
-            position: relative;
-            z-index: 2;
-        }
+
         .navbar-brand, .nav-link {
-            color: #33ff33 !important;
-            text-shadow: 0 0 5px #33ff33;
-            transition: all 0.3s ease;
+            color: var(--primary-color) !important;
+            font-weight: 500;
         }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+        }
+
         .nav-link:hover {
-            color: #ffffff !important;
-            text-shadow: 0 0 10px #ffffff;
+            color: var(--hover-color) !important;
         }
+
+        .dropdown-menu {
+            background-color: rgba(0, 26, 0, 0.95);
+            border: 1px solid var(--primary-color);
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+        }
+
+        .dropdown-item {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+            color: var(--primary-color);
+        }
+
         .btn-outline-cyber {
-            border-color: #33ff33;
-            color: #33ff33;
-            background-color: rgba(51, 255, 51, 0.1);
-            transition: all 0.3s ease;
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 500;
         }
+
         .btn-outline-cyber:hover {
-            background-color: #33ff33;
-            color: #000000;
+            background-color: var(--primary-color);
+            color: var(--background-color);
         }
+
         main {
-            background-color: rgba(10, 10, 10, 0.8);
-            border: 1px solid #33ff33;
-            border-radius: 5px;
-            padding: 20px;
-            margin-top: 20px;
-            box-shadow: 0 0 10px #33ff33;
+            flex: 1;
+            padding-top: 70px; /* Ajuste para el navbar fijo */
         }
+
         footer {
-            background-color: #0a0a0a;
-            border-top: 1px solid #33ff33;
-            color: #33ff33;
+            background-color: rgba(0, 26, 0, 0.9);
+            border-top: 1px solid var(--primary-color);
+            color: var(--text-color);
             padding: 2rem 0;
             margin-top: 3rem;
         }
-        .footer-link {
-            color: #33ff33;
-            text-decoration: none;
-            transition: all 0.3s ease;
+
+        .footer-link, .social-icons a {
+            color: var(--primary-color);
+            font-size: 0.9rem;
         }
-        .footer-link:hover {
-            color: #ffffff;
-            text-shadow: 0 0 5px #ffffff;
+
+        .footer-link:hover, .social-icons a:hover {
+            color: var(--hover-color);
+            text-shadow: 0 0 5px var(--primary-color);
         }
-        .social-icons a {
-            color: #33ff33;
-            font-size: 1.5rem;
-            margin: 0 10px;
-            transition: all 0.3s ease;
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 5px var(--primary-color); }
+            50% { text-shadow: 0 0 20px var(--primary-color), 0 0 30px var(--hover-color); }
+            100% { text-shadow: 0 0 5px var(--primary-color); }
         }
-        .social-icons a:hover {
-            color: #ffffff;
-            text-shadow: 0 0 10px #ffffff;
+
+        .navbar-brand {
+            animation: glow 2s infinite;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Fira Code', monospace;
+            font-weight: 600;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-menu i {
+            margin-right: 0.5rem;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 991px) {
+            .navbar-nav {
+                padding-top: 1rem;
+            }
+            .nav-item {
+                text-align: center;
+            }
+            .dropdown-menu {
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 767px) {
+            .footer-column {
+                text-align: center;
+                margin-bottom: 1.5rem;
+            }
+            .social-icons {
+                justify-content: center;
+            }
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{% url 'index' %}">
-                <i class="fas fa-shield-alt"></i> CyberShield
+                <i class="fas fa-shield-alt cyber-icon pulse"></i> CyberShield
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav ms-auto align-items-center">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-home"></i> Inicio</a>
+                        <a class="nav-link" href="{% url 'index' %}">Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'apps.posts:posts' %}"><i class="fas fa-file-alt"></i> Posts</a>
+                        <a class="nav-link" href="{% url 'apps.posts:posts' %}">Posts</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'apps.contacto:contacto' %}"><i class="fas fa-envelope"></i> Contacto</a>
+                        <a class="nav-link" href="{% url 'apps.contacto:contacto' %}">Contacto</a>
                     </li>
-                    <div class="dropdown">
-                        {% if user.is_authenticated %}
-                        <li><a href="{% url 'apps.usuario:logout' %}">{{user.username}}: Logout</a>
-                        <div class="dropdown-content">
-                            <table>
-                                <tr>
-                                    {% if user.is_superuser or request.user|has_group:'Colaborador' %}
-                                    <td><a href="{% url 'apps.usuario:usuario_list' %}">Lista de usuarios</a></td>
-                                    {% endif %}
-                                </tr>
-                                <tr>
-                                    <td><a href="{% url 'apps.posts:categoria_list' %}">Lista de categorias</a></td>
-                                </tr>
-                            </table>
-                        </div>
-
-                        </li>
-                        {% else %}
-                        <li>
-                            <a href="{% url 'apps.usuario:login' %}" class="btn btn-outline-cyber me-2">Iniciar Sesión</a>
-                        </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-menu" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> {{ user.username }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit"></i> Editar perfil</a></li>
+                            {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+                            <li><a class="dropdown-item" href="{% url 'apps.usuario:usuario_list' %}"><i class="fas fa-users"></i> Lista de usuarios</a></li>
+                            {% endif %}
+                            <li><a class="dropdown-item" href="{% url 'apps.posts:categoria_list' %}"><i class="fas fa-list"></i> Lista de categorías</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'apps.usuario:logout' %}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                        </ul>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'apps.usuario:login' %}" class="btn btn-outline-cyber">Iniciar Sesión</a>
+                    </li>
                     {% endif %}
-                    </div>
                 </ul>
             </div>
         </div>
     </nav>
 
     {% if messages %}
-    <div class="messages">
+    <div class="messages container mt-3">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
             {{ message }}
@@ -156,6 +226,30 @@
 
     <footer>
         <div class="container">
+            <div class="row">
+                <div class="col-md-4 footer-column">
+                    <h5>Enlaces rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="{% url 'index' %}" class="footer-link">Inicio</a></li>
+                        <li><a href="{% url 'apps.posts:posts' %}" class="footer-link">Posts</a></li>
+                        <li><a href="{% url 'apps.contacto:contacto' %}" class="footer-link">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 footer-column">
+                    <h5>Síguenos</h5>
+                    <div class="social-icons d-flex justify-content-center justify-content-md-start">
+                        <a href="#" class="me-3"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="me-3"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 footer-column">
+                    <h5>Contacto</h5>
+                    <p><i class="fas fa-envelope me-2"></i> info@cybershield.com</p>
+                    <p><i class="fas fa-phone me-2"></i> +1 (555) 123-4567</p>
+                </div>
+            </div>
             <div class="text-center mt-4">
                 <small>Copyright &copy; 2024 CyberShield. Todos los derechos reservados.</small>
             </div>
@@ -165,18 +259,33 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const navbar = document.querySelector('.navbar');
+            const navLinks = document.querySelectorAll('.nav-link');
 
-<script>
-    // Cerrar automáticamente las alertas después de 5 segundos
-    document.addEventListener('DOMContentLoaded', (event) => {
-        setTimeout(function() {
-            var alerts = document.getElementsByClassName('alert');
-            for(var i = 0; i < alerts.length; i++) {
-                alerts[i].style.display = 'none';
-            }
-        }, 5000);
-    });
-</script>
-{% endblock %}
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.style.padding = '0.3rem 1rem';
+                    navbar.style.backgroundColor = 'rgba(0, 26, 0, 0.95)';
+                } else {
+                    navbar.style.padding = '0.5rem 1rem';
+                    navbar.style.backgroundColor = 'rgba(0, 26, 0, 0.9)';
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', (e) => {
+                    e.target.style.transform = 'translateY(-2px)';
+                    e.target.style.textShadow = '0 0 10px var(--primary-color)';
+                });
+                link.addEventListener('mouseleave', (e) => {
+                    e.target.style.transform = 'translateY(0)';
+                    e.target.style.textShadow = 'none';
+                });
+            });
+        });
+    </script>
+    {% endblock %}
 </body>
 </html>

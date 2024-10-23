@@ -1,23 +1,110 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<center>
-    <form method="post">
-        <h1>Formulario de contacto</h1>
-        <br>
-        {% if messages %}
-            {% for message in messages %}
-        <div class="alert alert-{{message.tags}}">
-            {{message}}
-        </div>
-        {% endfor %}
-        {% endif %}
-        {% csrf_token %}
-        <table>
-            {{form}}
-        </table>
-        <input type="submit" value="Enviar">
-    </form>
-</center>
+{% block title %}CyberShield - Contacto{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .contact-container {
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .contact-title {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .contact-intro {
+        color: var(--text-color);
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .contact-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .contact-form input[type="text"],
+    .contact-form input[type="email"],
+    .contact-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+    }
+    .contact-form input[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .contact-form input[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .alert {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .alert-success {
+        background-color: rgba(0, 255, 0, 0.2);
+        color: #00ff00;
+    }
+    .alert-error {
+        background-color: rgba(255, 0, 0, 0.2);
+        color: #ff0000;
+    }
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="container">
+    <div class="contact-container">
+        <h1 class="contact-title text-center">Formulario de contacto</h1>
+        <p class="contact-intro">
+            ¿Tienes preguntas sobre ciberseguridad? ¿Necesitas ayuda con algún tema específico? 
+            No dudes en contactarnos. Estamos aquí para ayudarte a proteger tu presencia digital.
+        </p>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post" class="contact-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="text-center">
+                <input type="submit" value="Enviar">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

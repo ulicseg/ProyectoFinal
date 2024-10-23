@@ -1,11 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}CyberShield - Tu escudo digital{% endblock %}
+
 {% block extra_css %}
 <style>
-    .hero {
-        background-color: #0a0a0a; /* Color de fondo oscuro como fallback */
-        background-image: url("{% static 'img/cybersecurity-background.jpg' %}");
+    body {
+        background-color: #001200; /* Fondo verde más oscuro */
+    }
+    .hero {   
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
@@ -23,7 +26,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(0, 18, 0, 0.7); /* Ajustado para coincidir con el nuevo fondo */
     }
     .hero-content {
         text-align: center;
@@ -31,14 +34,14 @@
         z-index: 1;
         max-width: 800px;
         padding: 2rem;
-        background: rgba(0, 0, 0, 0.8);
+        background: rgba(0, 18, 0, 0.8); /* Ajustado para coincidir con el nuevo fondo */
         border-radius: 10px;
-        box-shadow: 0 0 20px rgba(51, 255, 51, 0.5);
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
     }
     .hero h1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
         margin-bottom: 1rem;
-        text-shadow: 0 0 10px #33ff33;
+        text-shadow: 0 0 10px var(--primary-color);
     }
     .hero p {
         font-size: 1.1rem;
@@ -61,6 +64,29 @@
     }
     .topic-list li {
         margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+    }
+    .topic-list li::before {
+        content: '>';
+        color: var(--primary-color);
+        margin-right: 0.5rem;
+        font-weight: bold;
+    }
+    .cta-button {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+    .cta-button:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
     }
 </style>
 {% endblock %}
@@ -80,11 +106,13 @@
             <li>Noticias sobre las últimas amenazas cibernéticas y cómo prevenirlas</li>
         </ul>
         <p>Explora nuestro contenido para mantenerte un paso adelante de los ciberdelincuentes y garantizar tu seguridad en el mundo digital.</p>
+        <a href="{% url 'apps.posts:posts' %}" class="cta-button">Explorar Posts</a>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
+{{ block.super }}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const text = "Tu escudo digital contra las amenazas cibernéticas";

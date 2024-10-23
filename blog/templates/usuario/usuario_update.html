@@ -1,15 +1,95 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-<div class="container mt-5">
-    <h1>Actualizar Usuario</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Actualizar</button>
-        <a href="{% url 'apps.usuario:usuario_list' %}" class="btn btn-secondary">Cancelar</a>
-    </form>
-</div>
+{% block title %}CyberShield - Actualizar Usuario{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .update-container {
+        max-width: 600px;
+        margin: 100px auto;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .update-title {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .update-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .update-form input[type="text"],
+    .update-form input[type="email"],
+    .update-form input[type="password"],
+    .update-form select {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+    }
+    .update-form button[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .update-form button[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .btn-cancel {
+        padding: 0.8rem 1.5rem;
+        background-color: #dc3545;
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .btn-cancel:hover {
+        background-color: #c82333;
+        box-shadow: 0 0 15px #dc3545;
+    }
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="container">
+    <div class="update-container">
+        <h1 class="update-title">Actualizar Usuario</h1>
+        <form method="post" class="update-form">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="text-center mt-3">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+                <a href="{% url 'apps.usuario:usuario_list' %}" class="btn-cancel">Cancelar</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

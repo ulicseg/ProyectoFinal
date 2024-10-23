@@ -1,4 +1,3 @@
-
 from .models import Post, Categoria
 from .forms import ComentarioForm, CreatePostForm, NuevaCategoriaForm
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
@@ -96,11 +95,20 @@ class CategoriaDeleteView(LoginRequiredMixin,DeleteView):
     template_name = 'posts/categoria_confirm_delete.html'
     success_url = reverse_lazy('apps.posts:categoria_list')
 
-class PostUpdateView(LoginRequiredMixin,UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = CreatePostForm
     template_name = 'posts/modificar_post.html'
     success_url = reverse_lazy('apps.posts:posts')
+
+    def form_valid(self, form):
+        form.instance.autor = self.request.user
+        return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['imagen'].required = False
+        return form
 
 class PostDeleteView(DeleteView):
     model = Post
@@ -115,4 +123,3 @@ class PostPorCategoriaView(ListView):
 
     def get_queryset(self):
         return Post.objects.filter(categoria=self.kwargs['pk'])
-

@@ -2,32 +2,124 @@
 {% load static %}
 {% load colaborador_tags %}
 
+{% block title %}{{ post.titulo }} - CyberShield{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200; /* Fondo verde más oscuro */
+    }
+    .post-container {
+        margin-top: 100px;
+        padding: 2rem 0;
+    }
+    .post-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .post-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .post-subtitle {
+        color: var(--text-color);
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    .post-meta {
+        font-size: 0.9rem;
+        color: var(--text-color);
+        opacity: 0.8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    .post-category {
+        background-color: rgba(0, 255, 0, 0.1);
+        color: var(--primary-color);
+        padding: 0.3rem 0.6rem;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .post-image {
+        width: 100%;
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+    }
+    .post-content {
+        background-color: rgba(0, 26, 0, 0.6);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .post-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+    .post-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+    .post-action-btn {
+        padding: 0.5rem 1rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    .post-action-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .comments-section {
+        margin-top: 3rem;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<center>
-<div class="container-fluid" style="margin: 200px;">
-    <br>
-    <li>{{ post.titulo }}</li>
-    <li>{{ post.subtitulo }}</li>
-    <li>{{ post.categoria }}</li>
-    <br>
-    <li>{{ post.texto }}</li>
-    {% if post.imagen %}
-    <img src="{{ post.imagen.url }}" alt="">
-    {% else %}
-    <p>No hay imagen disponible</p>
-    {% endif %}
-    {% if user.is_superuser or request.user|has_group:'Colaborador' %}
-    <div class="container-fluid" style="margin-top: 300px;">
-        <a id="boton_post" href="{% url 'apps.posts:post_update' pk=post.id %}">Modificar Post</a>
-    </div>
-    <div class="container-fluid" style="margin-top: 300px;">
-        <a id="boton_post" href="{% url 'apps.posts:post_delete' pk=post.id %}">Eliminar Post</a>
-    </div>
-    {% endif %}
+<div class="post-container">
+    <div class="container">
+        <article class="post-content">
+            <header class="post-header">
+                <h1 class="post-title">{{ post.titulo }}</h1>
+                <p class="post-subtitle">{{ post.subtitulo }}</p>
+                <div class="post-meta">
+                    <span class="post-category">{{ post.categoria }}</span>
+                </div>
+            </header>
 
+            {% if post.imagen %}
+            <img src="{{ post.imagen.url }}" alt="{{ post.titulo }}" class="post-image">
+            {% endif %}
+
+            <div class="post-text">
+                {{ post.texto|safe }}
+            </div>
+
+            {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+            <div class="post-actions">
+                <a href="{% url 'apps.posts:post_update' pk=post.id %}" class="post-action-btn">Modificar Post</a>
+                <a href="{% url 'apps.posts:post_delete' pk=post.id %}" class="post-action-btn">Eliminar Post</a>
+            </div>
+            {% endif %}
+        </article>
+
+        <section class="comments-section">
+            {% include 'comentario/crear_comentario.html' %}
+        </section>
+    </div>
 </div>
-
-{% include 'comentario/crear_comentario.html' %}
-
-</center>
 {% endblock %}

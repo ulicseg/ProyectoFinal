@@ -1,22 +1,73 @@
 {% extends 'base.html' %}
 {% load colaborador_tags %}
 
+{% block title %}CyberShield - Eliminar Comentario{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .delete-comment-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .delete-comment-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .delete-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: #ff3333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .delete-btn:hover {
+        background-color: #cc0000;
+        box-shadow: 0 0 15px #ff3333;
+    }
+    .cancel-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-left: 1rem;
+    }
+    .cancel-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<center>
+<div class="container">
     {% if user.is_superuser or request.user|has_group:'Colaborador' or comentario.usuario == user %}
-    <div class="container-fluid" style="margin-top: 300px;">
-        <h1>Eliminar comentario</h1>
-        <p>¿Estás seguro de querer eliminar este comentario?</p>
-        <form method="post">
+    <div class="delete-comment-container">
+        <h1 class="delete-comment-title text-center">Eliminar comentario</h1>
+        <p class="text-center">¿Estás seguro de querer eliminar este comentario?</p>
+        <form method="post" class="text-center">
             {% csrf_token %}
-            <input type="submit" value="Sí, eliminar">
-            <a style="color: red; " href="{{ object.get.absolute_url }}">No, cancelar</a>
+            <button type="submit" class="delete-btn">Sí, eliminar</button>
+            <a href="{% url 'apps.posts:post_individual' id=comentario.post.id %}" class="cancel-btn">No, cancelar</a>
         </form>
     </div>
     {% else %}
-    <div class="container-fluid" style="margin-top: 300px;">
-        <h1>Solo usuarios con permisos pueden acceder a esta página</h1>
+    <div class="text-center">
+        <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
     </div>
     {% endif %}
-</center>
+</div>
 {% endblock %}

@@ -1,22 +1,83 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block title %}CyberShield - Modificar Post{% endblock %}
 
-<center>
-<div class="container-fluid"style="margin: 30px;">
-    <a id="boton_post" href="{% url 'apps.posts:crear_categoria' %}?next={% url 'apps.posts:post_update' pk=object.id %}">Modificar Post</a>
-<br>
-<h1>Modificar Post</h1>
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Guardar cambios">
-</form>
-</div>
-</center>
-
-
-
-
+{% block extra_css %}
+<style>
+    .modify-post-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .modify-post-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .modify-category-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-bottom: 1.5rem;
+    }
+    .modify-category-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .post-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .post-form input[type="text"],
+    .post-form textarea,
+    .post-form select {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+    }
+    .post-form input[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .post-form input[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
 {% endblock %}
 
+{% block content %}
+<div class="container">
+    <div class="modify-post-container">
+        <h1 class="modify-post-title text-center">Modificar Post</h1>
+        <div class="text-center">
+            <a href="{% url 'apps.posts:crear_categoria' %}?next={% url 'apps.posts:post_update' pk=object.id %}" class="modify-category-btn">Modificar Categoría</a>
+        </div>
+        <form method="post" enctype="multipart/form-data" class="post-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="text-center">
+                <input type="submit" value="Guardar cambios">
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

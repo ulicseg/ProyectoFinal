@@ -1,29 +1,117 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
-{% block title %}Registro de Usuario{% endblock %}
+{% block title %}Registro de Usuario - CyberShield{% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center">Registro de usuario</h1>
-    
-    {% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-    </div>
-    {% endif %}
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="register-container">
+                <h2 class="register-title text-center">Registro de Usuario</h2>
+                <p class="register-intro">
+                    Únete a CyberShield y forma parte de nuestra comunidad de ciberseguridad.
+                </p>
+                
+                {% if messages %}
+                <div class="messages mb-4">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Registrar</button>
-    </form>
+                <form method="post" class="register-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group mb-3">
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="error">{{ field.errors }}</div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <div class="text-center">
+                        <input type="submit" value="Registrarse" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
+{% block extra_css %}
+<style>
+    .register-container {
+        margin-top: 50px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .register-title {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .register-intro {
+        color: var(--text-color);
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    .register-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .register-form input[type="text"],
+    .register-form input[type="email"],
+    .register-form input[type="password"] {
+        width: 100%;
+        padding: 0.5rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+    }
+    .register-form input[type="submit"] {
+        padding: 0.6rem 1.2rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .register-form input[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .alert {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        font-weight: bold;
+    }
+    .alert-success {
+        background-color: rgba(0, 255, 0, 0.2);
+        color: #00ff00;
+    }
+    .alert-error {
+        background-color: rgba(255, 0, 0, 0.2);
+        color: #ff0000;
+    }
+    .error {
+        color: #ff0000;
+        font-size: 0.9rem;
+        margin-top: 0.25rem;
+    }
+</style>
+{% endblock %}

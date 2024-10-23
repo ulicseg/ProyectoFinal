@@ -1,39 +1,148 @@
 {% load colaborador_tags %}
 
-<div class="container-fluid" style="margin-bottom: 20px;">
-    <h2>Comentarios</h2>
-    <br><br>
-</div>
-<div class="container-fluid" style="margin-bottom: 20px;"></div>
-    {% for comentario in comentarios %}
-        <table>{{comentario.usuario}} - {{comentario.fecha}}</table>
-        <ul class="w-100 list-unstyled d-flex flex-column flex-md-row justify-content-between mt-4">
-            <p>{{comentario.texto}}</p>
-            {% if user.is_superuser or comentario.usuario == user %}
-                <br><a id="boton_post" href="{% url 'apps.comentario:comentario_confirm_delete' pk=comentario.pk %}">Eliminar</a>
-            {% endif %}
-            <br><br>
-        </ul>
-        {% empty %}
-        <p>No hay comentarios - Puedes ser el primero en comentar</p>
-    {% endfor %}
+<div class="comments-section">
+    <h2 class="comments-title">Comentarios</h2>
+    
+    <div id="comments-container">
+        {% if comentarios %}
+            {% for comentario in comentarios %}
+                <div class="comment" data-comment-id="{{ comentario.pk }}">
+                    <div class="comment-header">
+                        <span class="comment-author">{{ comentario.usuario }}</span>
+                        <span class="comment-date">{{ comentario.fecha|date:"d/m/Y H:i" }}</span>
+                    </div>
+                    <p class="comment-text">{{ comentario.texto }}</p>
+                    {% if user.is_superuser or comentario.usuario == user %}
+                        <a href="{% url 'apps.comentario:comentario_confirm_delete' pk=comentario.pk %}" class="delete-comment-btn">Eliminar</a>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="no-comments">No hay comentarios - Sé el primero en comentar</p>
+        {% endif %}
     </div>
-    <a id="comentario"></a>
-    <div class="container-fluid" style="margin-bottom: 100px;">
-        <form method="POST" style="margin-bottom: 100px; margin-top: 100px;">
-            {% csrf_token %}
-            {% if user.is_authenticated %}
-            <h2>Deja tu comentario</h2>
-            <form method="post">
+
+    <div class="create-comment-section">
+        {% if user.is_authenticated %}
+            <h3 class="create-comment-title">Deja tu comentario</h3>
+            <form method="post" class="create-comment-form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input type="submit" value="Comentar">
+                <button type="submit" class="submit-comment-btn">Comentar</button>
             </form>
-            {% else %}
-            <p>Debes iniciar sesión para comentar</p>
-            <a class="btn btn-success" href="{% url 'apps.usuario:login' %}?next={{request.path}}#comentario">Iniciar sesión</a>
+        {% else %}
+            <p class="login-message">Debes iniciar sesión para comentar</p>
+            <a href="{% url 'apps.usuario:login' %}?next={{request.path}}#comentario" class="login-btn">Iniciar sesión</a>
             <input type="hidden" name="next" value="{{request.path}}">
-            {% endif %}
-            
-        </form>
+        {% endif %}
     </div>
+</div>
+
+<style>
+    .comments-section {
+        margin-top: 2rem;
+        padding: 1rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .comments-title {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 5px rgba(0, 255, 0, 0.3);
+    }
+    .comment {
+        background-color: rgba(0, 26, 0, 0.8);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .comment:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+    }
+    .comment-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+    }
+    .comment-author {
+        font-weight: bold;
+        color: var(--primary-color);
+    }
+    .comment-date {
+        color: var(--text-color);
+        opacity: 0.7;
+    }
+    .comment-text {
+        color: var(--text-color);
+    }
+    .delete-comment-btn {
+        color: #ff3333;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+    }
+    .delete-comment-btn:hover {
+        color: #ff6666;
+        text-shadow: 0 0 5px #ff3333;
+    }
+    .no-comments {
+        color: var(--text-color);
+        font-style: italic;
+    }
+    .create-comment-section {
+        margin-top: 2rem;
+    }
+    .create-comment-title {
+        color: var(--primary-color);
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    .create-comment-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .create-comment-form textarea:focus {
+        outline: none;
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    .submit-comment-btn {
+        padding: 0.5rem 1rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .submit-comment-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    .login-message {
+        color: var(--text-color);
+        margin-bottom: 1rem;
+    }
+    .login-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .login-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+</style>

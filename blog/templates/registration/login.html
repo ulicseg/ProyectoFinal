@@ -1,69 +1,159 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Iniciar Sesión{% endblock %}
+{% block title %}Iniciar Sesión - CyberShield{% endblock %}
 
 {% block content %}
-<div class="login-container">
-    <h1>Iniciar Sesión</h1>
-    <form method="post" action="{% url 'apps.usuario:login' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Iniciar Sesión</button>
-    </form>
-    <div class="forgot-password">
-        <a href="{% url 'apps.usuario:password_reset' %}">¿Olvidaste tu contraseña?</a>
-    </div>
-    <div class="register">
-        <p>¿No tienes una cuenta? <a href="{% url 'apps.usuario:registrar' %}">Regístrate</a></p>
+<div class="login-page">
+    <div class="login-container">
+        <h1 class="login-title">Iniciar Sesión</h1>
+        <form method="post" action="{% url 'apps.usuario:login' %}" class="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Usuario</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password.id_for_label }}">Contraseña</label>
+                {{ form.password }}
+            </div>
+            <button type="submit" class="login-button">Iniciar Sesión</button>
+        </form>
+        <div class="forgot-password">
+            <a href="{% url 'apps.usuario:password_reset' %}">¿Olvidaste tu contraseña?</a>
+        </div>
+        <div class="register">
+            <p>¿No tienes una cuenta? <a href="{% url 'apps.usuario:registrar' %}">Regístrate</a></p>
+        </div>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_css %}
 <style>
-    .login-container {
-        background-color: white;
-        padding: 2rem;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        max-width: 400px;
-        margin: 2rem auto;
-    }
-    h1 {
-        text-align: center;
-        color: #333;
-    }
-    form {
+    body {
+        background-color: #001200;
+        margin: 0;
+        padding: 0;
+        font-family: 'Arial', sans-serif;
+        min-height: 100vh;
         display: flex;
         flex-direction: column;
     }
-    input {
-        margin: 0.5rem 0;
-        padding: 0.5rem;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+    .login-page {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
     }
-    button {
+    .login-container {
+        background-color: rgba(0, 26, 0, 0.8);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+        max-width: 400px;
+        width: 100%;
+    }
+    .login-title {
+        text-align: center;
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .login-form {
+        display: flex;
+        flex-direction: column;
+    }
+    .form-group {
+        margin-bottom: 1rem;
+    }
+    .form-group label {
+        display: block;
+        color: var(--text-color);
+        margin-bottom: 0.5rem;
+    }
+    .form-group input {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid var(--primary-color);
+        background-color: rgba(0, 26, 0, 0.6);
+        color: var(--text-color);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .form-group input:focus {
+        outline: none;
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    .login-button {
         margin-top: 1rem;
-        padding: 0.5rem;
-        background-color: #007bff;
-        color: white;
+        padding: 0.8rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+        font-weight: bold;
     }
-    button:hover {
-        background-color: #0056b3;
+    .login-button:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
     }
-    .forgot-password {
-        text-align: right;
-        margin-top: 0.5rem;
-    }
-    .register {
+    .forgot-password, .register {
         text-align: center;
         margin-top: 1rem;
     }
+    .forgot-password a, .register a {
+        color: var(--primary-color);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .forgot-password a:hover, .register a:hover {
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+    .register p {
+        color: var(--text-color);
+    }
+    
+    @media (max-width: 480px) {
+        .login-container {
+            padding: 1.5rem;
+        }
+        .login-title {
+            font-size: 1.8rem;
+        }
+        .login-button {
+            padding: 0.7rem;
+        }
+    }
 </style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const inputs = document.querySelectorAll('.form-group input');
+    
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            if (this.value === '') {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+    });
+
+    const loginForm = document.querySelector('.login-form');
+    loginForm.addEventListener('submit', function() {
+        this.classList.add('submitted');
+    });
+});
+</script>
 {% endblock %}

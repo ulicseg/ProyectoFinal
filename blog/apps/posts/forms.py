@@ -13,7 +13,7 @@ class ComentarioForm(forms.ModelForm):
 class CreatePostForm(forms.ModelForm):
     class Meta:
         model = Post
-        fields = '__all__'
+        fields = ['titulo', 'subtitulo', 'texto', 'categoria', 'imagen', 'activo']
 
 class NuevaCategoriaForm(forms.ModelForm):
     class Meta:

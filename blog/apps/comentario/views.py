@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.generic import View, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from .models import Comentario
 from .forms import ComentarioForm
 from apps.posts.models import Post
@@ -71,7 +71,7 @@ class DeleteComentario(DeleteView):
         if next_url:
             return next_url
         else:
-            return reverse_lazy('apps.posts:posts')
+            return reverse('apps.posts:post_individual', kwargs={'id': self.object.post.id})
 
 
 class DetallePostView(View):

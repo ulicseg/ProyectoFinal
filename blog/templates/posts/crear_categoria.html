@@ -1,19 +1,92 @@
 {% extends 'base.html' %}
+{% load colaborador_tags %}
+
+{% block title %}CyberShield - Crear Categoría{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .create-category-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .create-category-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .category-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .category-form input[type="text"] {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+    }
+    .category-form input[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .category-form input[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .list-categories-btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+    .list-categories-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-
-<center>
-    <div class="container-fluid" style="margin-top: 200px;">
-        <h1>Agregar una nueva categoria</h1>
-        <form method="post">
+<div class="container">
+    {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+    <div class="create-category-container">
+        <h1 class="create-category-title text-center">Agregar una nueva categoría</h1>
+        <form method="post" class="category-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Agregar">
+            <div class="text-center">
+                <input type="submit" value="Agregar">
+            </div>
         </form>
-        <div class="container-fluid" style="margin-top: 20px;">
-            <a id="boton_post" href="{% url 'apps.posts:categoria_list' %}">Listar todas las categorias</a>
+        <div class="text-center">
+            <a href="{% url 'apps.posts:categoria_list' %}" class="list-categories-btn">Listar todas las categorías</a>
         </div>
     </div>
-</center>
-
+    {% else %}
+    <div class="text-center">
+        <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+    </div>
+    {% endif %}
+</div>
 {% endblock %}
+

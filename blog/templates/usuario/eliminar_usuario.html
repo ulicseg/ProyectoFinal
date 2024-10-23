@@ -1,30 +1,94 @@
 {% extends 'base.html' %}
-{% load colaborador_tags %  }
-{% block content %}
-<center>
-    {% if user.is_superuser or request.user|has_group:'Colaborador' %}
-    <div class="container-fluid" style="margin: 400px;">
-        <h1>Eliminar usuario</h1><br>
-        <p>¿Estás seguro de querer eliminar el usuario {{ object.username }}?</p>
-        <form method="post">
-            {% csrf_token %}
-            <label for="eliminar_comentarios">¿Desea eliminar los comentarios del usuario?</label>
-            <input type="checkbox" name="eliminar_comentarios" id="eliminar_comentarios">
-            <br><br>
-            {% if es_colaborador %}
-                <label for="eliminar_posts">¿Desea eliminar los posts del usuario?</label>
-                <input type="checkbox" name="eliminar_posts" id="eliminar_posts">
-                <br><br>
-            {% endif %}
+{% load colaborador_tags %}
 
-            <input type="submit" value="Sí, eliminar">
-            <a style="color: red;" href="{% url 'apps.usuario:usuario_list' %}">No, cancelar</a>
-        </form>
+{% block title %}CyberShield - Eliminar Usuario{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .delete-container {
+        max-width: 600px;
+        margin: 100px auto;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .delete-title {
+        color: var(--primary-color);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .delete-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .delete-form input[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: #dc3545;
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .delete-form input[type="submit"]:hover {
+        background-color: #c82333;
+        box-shadow: 0 0 15px #dc3545;
+    }
+    .btn-cancel {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+    .btn-cancel:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="delete-container">
+        {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+            <h1 class="delete-title">Eliminar usuario</h1>
+            <p class="text-center">¿Estás seguro de querer eliminar el usuario {{ object.username }}?</p>
+            <form method="post" class="delete-form">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="eliminar_comentarios">
+                        <input type="checkbox" name="eliminar_comentarios" id="eliminar_comentarios">
+                        ¿Desea eliminar los comentarios del usuario?
+                    </label>
+                </div>
+                {% if es_colaborador %}
+                    <div class="form-group">
+                        <label for="eliminar_posts">
+                            <input type="checkbox" name="eliminar_posts" id="eliminar_posts">
+                            ¿Desea eliminar los posts del usuario?
+                        </label>
+                    </div>
+                {% endif %}
+                <div class="text-center mt-3">
+                    <input type="submit" value="Sí, eliminar">
+                    <a href="{% url 'apps.usuario:usuario_list' %}" class="btn-cancel">No, cancelar</a>
+                </div>
+            </form>
+        {% else %}
+            <h1 class="delete-title">Acceso Denegado</h1>
+            <p class="text-center">Solo usuarios con permisos pueden acceder a esta página.</p>
+        {% endif %}
     </div>
-    {% else %}
-    <div class="container-fluid" style="margin: 300px;">
-        <h1>Solo usuarios con permisos pueden acceder a esta pagina</h1>
-    </div>
-    {% endif %}
-</center>
+</div>
 {% endblock %}

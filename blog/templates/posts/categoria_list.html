@@ -1,26 +1,117 @@
 {% extends 'base.html' %}
+{% load static %}
+{% load colaborador_tags %}
+
+{% block title %}CyberShield - Categorías{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200; /* Fondo verde más oscuro */
+    }
+    .categories-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .categories-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .categories-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .category-item {
+        background-color: rgba(0, 26, 0, 0.8);
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    .category-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+    }
+    .category-link {
+        color: var(--primary-color);
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    .category-link:hover {
+        color: var(--hover-color);
+        text-shadow: 0 0 5px var(--primary-color);
+    }
+    .delete-category {
+        color: #ff3333;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    .delete-category:hover {
+        color: #ff6666;
+        text-shadow: 0 0 5px #ff3333;
+    }
+    .no-categories {
+        color: var(--text-color);
+        text-align: center;
+        font-style: italic;
+    }
+    .create-category-btn {
+        display: inline-block;
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+    .create-category-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<center>
-<div class="container-fluid" style="margin: 200px;">
-
-    <h1>Listado de categorías</h1>
-    <br>
-    <ul>
-        {% for categoria in categorias %}
-            <li>
-                <a href="{% url 'apps.posts:posts_por_categoria' categoria.pk %}" style="color: red;">
-                    {{ categoria.nombre }}
-                </a>
-                {% if request.user.groups.all.0.name == 'colaborador' %}
-                    <a style="color: aqua;" href="{% url 'apps.posts:categoria_delete' pk=categoria.pk %}">Eliminar</a>
-                {% endif %}
-            </li>
-        {% empty %}
-            <li>No hay categorías</li>
-        {% endfor %}
-    </ul>
-
+<div class="container">
+    <div class="categories-container">
+        <h1 class="categories-title">Listado de Categorías</h1>
+        
+        {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+        <div class="text-center">
+            <a href="{% url 'apps.posts:crear_categoria' %}" class="create-category-btn">Crear nueva categoría</a>
+        </div>
+        {% endif %}
+        
+        {% if categorias %}
+            <ul class="categories-list">
+                {% for categoria in categorias %}
+                    <li class="category-item">
+                        <a href="{% url 'apps.posts:posts_por_categoria' categoria.pk %}" class="category-link">
+                            {{ categoria.nombre }}
+                        </a>
+                        {% if request.user.is_superuser or request.user|has_group:'Colaborador' %}
+                            <a href="{% url 'apps.posts:categoria_delete' pk=categoria.pk %}" class="delete-category">Eliminar</a>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-categories">No hay categorías disponibles.</p>
+        {% endif %}
+    </div>
 </div>
-</center>
 {% endblock %}

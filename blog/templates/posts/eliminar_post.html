@@ -2,16 +2,69 @@
 {% load static %}
 {% load colaborador_tags %}
 
-{% block title %}Eliminación de post{% endblock %}
+{% block title %}CyberShield - Eliminar Post{% endblock %}
+
+{% block extra_css %}
+<style>
+    .delete-post-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .delete-post-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .delete-post-message {
+        color: var(--text-color);
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+    }
+    .delete-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: #ff3333;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .delete-btn:hover {
+        background-color: #cc0000;
+        box-shadow: 0 0 15px #ff3333;
+    }
+    .cancel-btn {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        margin-left: 1rem;
+    }
+    .cancel-btn:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Eliminar Post</h2>
-    <p>¿Estás seguro de que quieres eliminar el post "{{ object.titulo }}"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn btn-danger">Sí, eliminar</button>
-        <a href="{% url 'apps.posts:post_individual' id=object.id %}" class="btn btn-secondary">Cancelar</a>
-    </form>
+<div class="container">
+    <div class="delete-post-container">
+        <h2 class="delete-post-title text-center">Eliminar Post</h2>
+        <p class="delete-post-message text-center">¿Estás seguro de que quieres eliminar el post "{{ object.titulo }}"?</p>
+        <form method="post" class="text-center">
+            {% csrf_token %}
+            <button type="submit" class="delete-btn">Sí, eliminar</button>
+            <a href="{% url 'apps.posts:post_individual' id=object.id %}" class="cancel-btn">Cancelar</a>
+        </form>
+    </div>
 </div>
 {% endblock %}

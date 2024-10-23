@@ -1,51 +1,129 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}CyberShield - Lista de Usuarios{% endblock %}
+
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200; /* Fondo verde más oscuro */
+    }
+    .user-list-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .user-list-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .user-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .user-item {
+        background-color: rgba(0, 26, 0, 0.8);
+        margin-bottom: 1rem;
+        padding: 1rem;
+        border-radius: 5px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+    }
+    .user-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 255, 0, 0.2);
+    }
+    .user-info {
+        flex-grow: 1;
+    }
+    .user-name {
+        color: var(--primary-color);
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+    .user-email {
+        color: var(--text-color);
+        font-size: 0.9rem;
+    }
+    .user-type {
+        margin: 0 1rem;
+    }
+    .user-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+    .btn-update, .btn-delete {
+        padding: 0.3rem 0.6rem;
+        border-radius: 3px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    .btn-update {
+        background-color: #007bff;
+        color: white;
+    }
+    .btn-delete {
+        background-color: #dc3545;
+        color: white;
+    }
+    .btn-update:hover, .btn-delete:hover {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    .no-users {
+        color: var(--text-color);
+        text-align: center;
+        font-style: italic;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-5">
-    <h1>Lista de Usuarios</h1>
+<div class="container user-list-container">
+    <h1 class="user-list-title">Lista de Usuarios</h1>
     {% if usuarios %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Username</th>
-                    <th>Email</th>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Tipo</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for usuario in usuarios %}
-                <tr>
-                    <td>{{ usuario.username }}</td>
-                    <td>{{ usuario.email }}</td>
-                    <td>{{ usuario.first_name }}</td>
-                    <td>{{ usuario.last_name }}</td>
-                    <td>
+        <ul class="user-list">
+            {% for usuario in usuarios %}
+                <li class="user-item">
+                    <div class="user-info">
+                        <span class="user-name">{{ usuario.username }}</span>
+                        <span class="user-email">{{ usuario.email }}</span>
+                    </div>
+                    <div class="user-type">
                         {% if usuario.groups.all %}
                             {% for group in usuario.groups.all %}
                                 {% if group.name == 'Colaborador' %}
-                                    Colaborador
+                                    <span class="badge bg-success">Colaborador</span>
                                 {% elif group.name == 'Registrado' %}
-                                    Registrado
+                                    <span class="badge bg-info">Registrado</span>
                                 {% endif %}
                             {% endfor %}
                         {% else %}
-                            Sin grupo
+                            <span class="badge bg-secondary">Sin grupo</span>
                         {% endif %}
-                    </td>
-                    <td>
-                        <a href="{% url 'apps.usuario:usuario_update' usuario.id %}" class="btn btn-info btn-sm">Actualizar</a>
-                        <a href="{% url 'apps.usuario:usuario_delete' usuario.id %}" class="btn btn-danger btn-sm">Eliminar</a>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{% url 'apps.usuario:usuario_update' usuario.id %}" class="btn-update">
+                            <i class="fas fa-edit"></i> Modificar
+                        </a>
+                    </div>
+                    <div class="user-actions">
+                        <a href="{% url 'apps.usuario:usuario_delete' usuario.id %}" class="btn-delete">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </a>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     {% else %}
-        <p>No hay usuarios registrados.</p>
+        <p class="no-users">No hay usuarios registrados.</p>
     {% endif %}
 </div>
 {% endblock %}

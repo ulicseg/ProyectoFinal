@@ -1,20 +1,113 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block title %}CyberShield - Editar Comentario{% endblock %}
 
-<center>
+{% block extra_css %}
+<style>
+    body {
+        background-color: #001200;
+    }
+    .edit-comment-container {
+        margin-top: 100px;
+        padding: 2rem;
+        background-color: rgba(0, 26, 0, 0.6);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
+    }
+    .edit-comment-title {
+        color: var(--primary-color);
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    }
+    .edit-comment-form label {
+        color: var(--text-color);
+        font-weight: bold;
+    }
+    .edit-comment-form textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-bottom: 1rem;
+        background-color: rgba(0, 26, 0, 0.8);
+        border: 1px solid var(--primary-color);
+        color: var(--text-color);
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    .edit-comment-form textarea:focus {
+        outline: none;
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    .edit-comment-form input[type="submit"] {
+        padding: 0.8rem 1.5rem;
+        background-color: var(--primary-color);
+        color: var(--background-color);
+        border: none;
+        border-radius: 5px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .edit-comment-form input[type="submit"]:hover {
+        background-color: var(--hover-color);
+        box-shadow: 0 0 15px var(--primary-color);
+    }
+    .unauthorized-message {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 100px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
     {% if user.is_superuser or comentario.usuario == user %}
-<div class="container-fluid" style="margin-top: 300px;">
-        <h1>Editar comentario</h1>
-        <form method="post" style="margin-bottom: 100px; margin-top: 100px;">
+    <div class="edit-comment-container">
+        <h1 class="edit-comment-title text-center">Editar comentario</h1>
+        <form method="post" class="edit-comment-form" id="edit-comment-form">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Guardar cambios">
+            <div class="text-center">
+                <input type="submit" value="Guardar cambios">
+            </div>
         </form>
     </div>
     {% else %}
-    <h1>Solo usuarios con permisos pueden acceder a esta página</h1>
+    <div class="text-center">
+        <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+    </div>
     {% endif %}
-</center>
+</div>
 
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('edit-comment-form');
+    
+    if (editForm) {
+        editForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Comentario actualizado con éxito');
+                    window.location.href = data.redirect_url;
+                } else {
+                    alert('Hubo un error al actualizar el comentario');
+                }
+            });
+        });
+    }
+});
+</script>
 {% endblock %}
