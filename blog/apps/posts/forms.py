@@ -1,10 +1,12 @@
 from django import forms
-from .models import Comentario, Post, Categoria
+from .models import Post, Categoria
+from apps.comentario.models import Comentario 
+
 
 class ComentarioForm(forms.ModelForm):
     class Meta:
         model = Comentario
-        fields = ['comentario']
+        fields = ['texto']
 
 
 

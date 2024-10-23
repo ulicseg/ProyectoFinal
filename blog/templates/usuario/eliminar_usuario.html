@@ -1,10 +1,6 @@
 {% extends 'base.html' %}
 {% load colaborador_tags %  }
-
-
-
 {% block content %}
-
 <center>
     {% if user.is_superuser or request.user|has_group:'Colaborador' %}
     <div class="container-fluid" style="margin: 400px;">

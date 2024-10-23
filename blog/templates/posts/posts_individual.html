@@ -4,57 +4,30 @@
 
 {% block content %}
 <center>
+<div class="container-fluid" style="margin: 200px;">
     <br>
     <li>{{ post.titulo }}</li>
     <li>{{ post.subtitulo }}</li>
     <li>{{ post.categoria }}</li>
     <br>
     <li>{{ post.texto }}</li>
+    {% if post.imagen %}
     <img src="{{ post.imagen.url }}" alt="">
-
+    {% else %}
+    <p>No hay imagen disponible</p>
+    {% endif %}
     {% if user.is_superuser or request.user|has_group:'Colaborador' %}
     <div class="container-fluid" style="margin-top: 300px;">
-        <a id="boton_post" href="{% url 'posts:post_update' pk=post.id %}">Modificar Post</a>
+        <a id="boton_post" href="{% url 'apps.posts:post_update' pk=post.id %}">Modificar Post</a>
     </div>
     <div class="container-fluid" style="margin-top: 300px;">
-        <a id="boton_post" href="{% url 'posts:post_delete' pk=post.id %}">Eliminar Post</a>
+        <a id="boton_post" href="{% url 'apps.posts:post_delete' pk=post.id %}">Eliminar Post</a>
     </div>
     {% endif %}
-</center>
-<center>
-<div class="container-fluid" style="margin-bottom: 20px;">
-    <h4>Comentarios</h4>
-    <br><br>
+
 </div>
-<div class="container-fluid" style="margin-bottom: 20px;"></div>
-    {% for comentario in comentarios %}
-        <table>{{comentario.usuario}} - {{comentario.fecha}}</table>
-        <ul class="w-100 list-unstyled d-flex flex-column flex-md-row justify-content-between mt-4">
-            <p>{{comentario.comentario}}</p>
-            <br><br>
-        </ul>
-        {% empty %}
-        <p>No hay comentarios - Puedes ser el primero en comentar</p>
-    {% endfor %}
-    </div>
-    <a id="comentario"></a>
-    <div class="container-fluid" style="margin-bottom: 100px;">
-        <form method="POST" style="margin-bottom: 100px; margin-top: 100px;">
-            {% csrf_token %}
-            {% if user.is_authenticated %}
-            <h2>Deja tu comentario</h2>
-            <form method="post">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <input type="submit" value="Comentar">
-            </form>
-            {% else %}
-            <p>Debes iniciar sesión para comentar</p>
-            <a class="btn btn-success" href="{% url 'apps.usuario:login' %}?next={{request.path}}#comentario">Iniciar sesión</a>
-            <input type="hidden" name="next" value="{{request.path}}">
-            {% endif %}
-            
-        </form>
-    </div>
+
+{% include 'comentario/crear_comentario.html' %}
+
 </center>
 {% endblock %}

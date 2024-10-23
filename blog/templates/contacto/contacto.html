@@ -12,8 +12,8 @@
         </div>
         {% endfor %}
         {% endif %}
+        {% csrf_token %}
         <table>
-            {{csrf_token}}
             {{form}}
         </table>
         <input type="submit" value="Enviar">

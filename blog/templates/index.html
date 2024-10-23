@@ -1,5 +1,105 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .hero {
+        background-color: #0a0a0a; /* Color de fondo oscuro como fallback */
+        background-image: url("{% static 'img/cybersecurity-background.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+    }
+    .hero-content {
+        text-align: center;
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        padding: 2rem;
+        background: rgba(0, 0, 0, 0.8);
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(51, 255, 51, 0.5);
+    }
+    .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        text-shadow: 0 0 10px #33ff33;
+    }
+    .hero p {
+        font-size: 1.1rem;
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+    .typing-effect::after {
+        content: '|';
+        animation: blink 0.7s infinite;
+    }
+    @keyframes blink {
+        0% { opacity: 1; }
+        50% { opacity: 0; }
+        100% { opacity: 1; }
+    }
+    .topic-list {
+        text-align: left;
+        margin-top: 1.5rem;
+        padding-left: 1rem;
+    }
+    .topic-list li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
-<h1>Bienvenido a mi blog</h1>
+<div class="hero">
+    <div class="hero-content">
+        <h1>Bienvenido a CyberShield</h1>
+        <p class="typing-effect"></p>
+        <p>En CyberShield, nos dedicamos a proporcionar información actualizada y crucial sobre ciberseguridad para ayudarte a proteger tu presencia digital en un mundo cada vez más conectado.</p>
+        <p>Nuestro blog cubre una amplia gama de temas esenciales, incluyendo:</p>
+        <ul class="topic-list">
+            <li>Análisis detallados de virus y malware emergentes</li>
+            <li>Comparativas y reseñas de los mejores antivirus del mercado</li>
+            <li>Consejos prácticos para fortalecer tu seguridad en línea</li>
+            <li>Guías paso a paso para proteger tus dispositivos y datos personales</li>
+            <li>Noticias sobre las últimas amenazas cibernéticas y cómo prevenirlas</li>
+        </ul>
+        <p>Explora nuestro contenido para mantenerte un paso adelante de los ciberdelincuentes y garantizar tu seguridad en el mundo digital.</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const text = "Tu escudo digital contra las amenazas cibernéticas";
+        const typingEffect = document.querySelector('.typing-effect');
+        let i = 0;
+
+        function typeWriter() {
+            if (i < text.length) {
+                typingEffect.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 50);
+            }
+        }
+
+        typeWriter();
+    });
+</script>
 {% endblock %}

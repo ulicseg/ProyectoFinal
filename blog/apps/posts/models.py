@@ -18,7 +18,7 @@ class Post(models.Model):
     fecha = models.DateTimeField(auto_now=True)
     texto = models.TextField(null=False)
     activo = models.BooleanField(default=True)
-    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, default="sin categoria")
+    categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     imagen = models.ImageField(null=True,blank=True,upload_to='media', default='static/post_default.jpg')
     publicado = models.BooleanField(default=timezone.now)
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
@@ -34,12 +34,4 @@ class Post(models.Model):
         super().delete()
 
 
-class Comentario(models.Model):
-    post = models.ForeignKey('posts.Post', on_delete=models.CASCADE, related_name='comentarios')
-    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='comentarios')
-    comentario = models.TextField()
-    fecha = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return self.comentario
 

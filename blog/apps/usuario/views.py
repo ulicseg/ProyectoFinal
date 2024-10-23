@@ -1,6 +1,6 @@
 from .forms import RegistroUsuarioForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView, ListView, DetailView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
@@ -8,7 +8,10 @@ from django.contrib.auth.models import Group
 from django.views import View
 from django.contrib.auth import logout
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.models import User
+from apps.posts.models import Post
+from apps.comentario.models import Comentario
+from .models import Usuario
+
 # Create your views here.
 
 
@@ -44,7 +47,7 @@ class LogoutUsuario(View):
         return reverse('apps.usuario:login')
     
 class UsuarioListView(LoginRequiredMixin,ListView):
-    model = User
+    model = Usuario
     template_name = 'usuario/usuario_list.html'
     context_object_name = 'usuarios'
 
@@ -55,13 +58,13 @@ class UsuarioListView(LoginRequiredMixin,ListView):
         return queryset
     
 class UsuarioDetailView(LoginRequiredMixin,ListView):
-    model = User
+    model = Usuario
     template_name = 'usuario/usuario_detail.html'
     context_object_name = 'usuario'
 
 
 class UsuarioDeleteView(LoginRequiredMixin,DeleteView):
-    model = User
+    model = Usuario
     template_name = 'usuario/eliminar_usuario.html'
     context_object_name = 'usuario'
     success_url = reverse_lazy('apps.usuario:usuario_list')
@@ -85,3 +88,12 @@ class UsuarioDeleteView(LoginRequiredMixin,DeleteView):
         messages.success(request, f'Usuario {self.object.username} eliminado correctamente')
         return super().post(request, *args, **kwargs)
 
+class UsuarioUpdateView(LoginRequiredMixin, UpdateView):
+    model = Usuario
+    template_name = 'usuario/usuario_update.html'
+    fields = ['username', 'email', 'first_name', 'last_name']
+    success_url = reverse_lazy('apps.usuario:usuario_list')
+
+    def form_valid(self, form):
+        messages.success(self.request, f'Usuario {form.instance.username} actualizado correctamente')
+        return super().form_valid(form)

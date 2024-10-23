@@ -36,7 +36,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'ulielian@outlook.com'
-EMAIL_HOST_PASSWORD = '1234567890'
+EMAIL_HOST_PASSWORD = 'ulises44086174'
 
 SITE_NAME = 'CyberShield'
 
@@ -55,6 +55,8 @@ INSTALLED_APPS = [
     'apps.posts',
     'apps.contacto',
     'apps.usuario',
+    'apps.comentario',
+
 ]
 
 MIDDLEWARE = [
@@ -96,7 +98,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
            'NAME': 'base_proyecto',
            'USER': 'root',
-           'PASSWORD': 'ulises44086174',
+           'PASSWORD': 'root',
            'HOST': 'localhost',  # O la dirección de tu servidor MySQL
            'PORT': '3306',       # Puerto por defecto de MySQL
     }

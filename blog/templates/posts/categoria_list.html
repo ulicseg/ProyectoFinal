@@ -4,22 +4,23 @@
 <center>
 <div class="container-fluid" style="margin: 200px;">
 
-    <h1>Listado de categorias</h1>
+    <h1>Listado de categorías</h1>
     <br>
     <ul>
         {% for categoria in categorias %}
-            <li>{{ categoria.nombre }}
-            <a style="color: aqua;" href="{% url 'posts:categoria_delete' pk=categoria.pk %}">Eliminar</a></li>
+            <li>
+                <a href="{% url 'apps.posts:posts_por_categoria' categoria.pk %}" style="color: red;">
+                    {{ categoria.nombre }}
+                </a>
+                {% if request.user.groups.all.0.name == 'colaborador' %}
+                    <a style="color: aqua;" href="{% url 'apps.posts:categoria_delete' pk=categoria.pk %}">Eliminar</a>
+                {% endif %}
+            </li>
         {% empty %}
-            <li>No hay categorias</li>
+            <li>No hay categorías</li>
         {% endfor %}
     </ul>
 
-
-    
 </div>
 </center>
-
-
-
 {% endblock %}

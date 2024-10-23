@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<center>
+<div class="container-fluid" style="margin-top: 300px;">
+    <h1>Posts por categoria</h1>
+    <ul>
+        {% for post in posts %}
+        <li><a style="color: red" href="{% url 'apps.posts:post_individual' post.id %}">{{ post.titulo }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+</center>
+
+{% endblock %}

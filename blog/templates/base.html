@@ -105,7 +105,7 @@
                         <a class="nav-link" href="{% url 'index' %}"><i class="fas fa-home"></i> Inicio</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'posts:posts' %}"><i class="fas fa-file-alt"></i> Posts</a>
+                        <a class="nav-link" href="{% url 'apps.posts:posts' %}"><i class="fas fa-file-alt"></i> Posts</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'apps.contacto:contacto' %}"><i class="fas fa-envelope"></i> Contacto</a>
@@ -117,14 +117,11 @@
                             <table>
                                 <tr>
                                     {% if user.is_superuser or request.user|has_group:'Colaborador' %}
-                                    <td><a href="{% url 'apps.usuario:usuario_list' %}">Lista de Usuarios</a></td>
+                                    <td><a href="{% url 'apps.usuario:usuario_list' %}">Lista de usuarios</a></td>
                                     {% endif %}
                                 </tr>
                                 <tr>
-                                    <td><a href="#">Lista de categorias</a></td>
-                                </tr>
-                                <tr></tr>
-                                    <td><a href="#">Lista de posts</a></td>
+                                    <td><a href="{% url 'apps.posts:categoria_list' %}">Lista de categorias</a></td>
                                 </tr>
                             </table>
                         </div>

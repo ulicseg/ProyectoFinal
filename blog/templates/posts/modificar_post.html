@@ -4,7 +4,7 @@
 
 <center>
 <div class="container-fluid"style="margin: 30px;">
-    <a id="boton_post" href="{% url 'posts:crear_categoria' %}?next={% url 'posts:post_update' pk=object.id %}">Modificar Post</a>
+    <a id="boton_post" href="{% url 'apps.posts:crear_categoria' %}?next={% url 'apps.posts:post_update' pk=object.id %}">Modificar Post</a>
 <br>
 <h1>Modificar Post</h1>
 <form method="post" enctype="multipart/form-data">

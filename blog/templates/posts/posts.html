@@ -3,17 +3,22 @@
 {% load colaborador_tags %}
 
 {% block content %}
-
+<center>
 {% if user.is_superuser or request.user|has_group:'Colaborador' %}
 <div class="container-fluid" style="margin-top: 200px;">
 
 <div class="container-fluid" style="margin-top: 300px;">
-    <a id="boton_post" href="{% url 'posts:crear_post' %}">Crear nuevo post</a>
+    <a id="boton_post" href="{% url 'apps.posts:crear_post' %}">Crear nuevo post</a>
 </div>
 {% endif %}
 
-
-
+<h2>Ordenar por:</h2>
+<ul>
+    <a href="{% url 'apps.posts:posts' %}?orden=reciente">Recientes</a>
+    <a href="{% url 'apps.posts:posts' %}?orden=antiguo">Antiguos</a>
+    <a href="{% url 'apps.posts:posts' %}?orden=alfabetico">Alfabetico</a>
+</ul>
+    
 
     {% for post in posts %}
         <br>
@@ -21,7 +26,7 @@
         <li>{{ i.subtitulo }}</li>
         <li>{{ i.categoria }}</li>
         <br>
-        <a href="{% url 'posts:post_detail' post.id %}">Leer más</a>
+        <a href="{% url 'apps.posts:post_individual' post.id %}">Leer más</a>
 
         {% empty %}
             <li>No hay registros</li>
@@ -33,5 +38,5 @@
     <h1>ahora estamos en otro template</h1>
 
 </div>
-
+</center>
 {% endblock %}

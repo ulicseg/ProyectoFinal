@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Lista de Usuarios</h1>
+    {% if usuarios %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Tipo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.username }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.first_name }}</td>
+                    <td>{{ usuario.last_name }}</td>
+                    <td>
+                        {% if usuario.groups.all %}
+                            {% for group in usuario.groups.all %}
+                                {% if group.name == 'Colaborador' %}
+                                    Colaborador
+                                {% elif group.name == 'Registrado' %}
+                                    Registrado
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            Sin grupo
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'apps.usuario:usuario_update' usuario.id %}" class="btn btn-info btn-sm">Actualizar</a>
+                        <a href="{% url 'apps.usuario:usuario_delete' usuario.id %}" class="btn btn-danger btn-sm">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No hay usuarios registrados.</p>
+    {% endif %}
+</div>
+{% endblock %}
