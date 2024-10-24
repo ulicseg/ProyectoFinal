@@ -2,7 +2,7 @@ from .forms import RegistroUsuarioForm, CambiarRolForm
 from django.contrib.auth.views import LoginView
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.contrib import messages
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, render
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import Group
 from django.views import View
@@ -56,12 +56,19 @@ class UsuarioListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         return self.request.user.is_superuser or self.request.user.groups.filter(name__in=['Administrador', 'Colaborador']).exists()
 
     def handle_no_permission(self):
-        raise PermissionDenied("No tienes permiso para ver esta página.")
+        return render(self.request, self.template_name, {
+            'unauthorized': True
+        })
 
     def get_queryset(self):
         queryset = super().get_queryset()
         queryset = queryset.exclude(is_superuser=True)
         return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_authorized'] = self.test_func()
+        return context
     
 class UsuarioDetailView(LoginRequiredMixin,ListView):
     model = Usuario
@@ -107,8 +114,8 @@ class UsuarioUpdateView(LoginRequiredMixin, UpdateView):
 class EditarPerfilView(LoginRequiredMixin, UpdateView):
     model = Usuario
     template_name = 'usuario/editar_perfil.html'
-    fields = ['username', 'email', 'first_name', 'last_name']
-    success_url = reverse_lazy('apps.usuario:perfil')
+    fields = ['username', 'email', 'first_name', 'last_name', 'imagen']  # Añadí 'imagen' aquí
+    success_url = reverse_lazy('index')  # Cambiado a 'index' o la página que prefieras
 
     def get_object(self, queryset=None):
         return self.request.user

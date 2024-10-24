@@ -20,7 +20,7 @@ class Post(models.Model):
     activo = models.BooleanField(default=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, null=True, blank=True)
     imagen = models.ImageField(null=True,blank=True,upload_to='media', default='static/post_default.jpg')
-    publicado = models.BooleanField(default=timezone.now)
+    publicado = models.DateTimeField(default=timezone.now)
     autor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
 
     class Meta:
@@ -32,6 +32,7 @@ class Post(models.Model):
     def delete(self, using=None, keep_parents=False):
         self.imagen.delete(self.imagen.name)
         super().delete()
+
 
 
 

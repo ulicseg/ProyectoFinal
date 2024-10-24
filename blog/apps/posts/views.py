@@ -1,11 +1,12 @@
 from .models import Post, Categoria
 from .forms import ComentarioForm, CreatePostForm, NuevaCategoriaForm
 from django.views.generic import ListView, DetailView, CreateView, DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from apps.comentario.models import Comentario 
 from django.http import Http404
+from django.contrib.auth.models import Group
 
 # Create your views here.
 
@@ -111,16 +112,19 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         form.fields['imagen'].required = False
         return form
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+class PostDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Post
     template_name = 'posts/eliminar_post.html'
     success_url = reverse_lazy('apps.posts:posts')
 
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        if self.object.autor != request.user:
-            raise Http404("Página no encontrada")
-        return super().dispatch(request, *args, **kwargs)
+    def test_func(self):
+        post = self.get_object()
+        return self.request.user.is_superuser or self.request.user.groups.filter(name='Colaborador').exists() or post.autor == self.request.user
+
+    def handle_no_permission(self):
+        return render(self.request, self.template_name, {
+            'unauthorized': True
+        })
 
 class PostPorCategoriaView(ListView):
     model = Post

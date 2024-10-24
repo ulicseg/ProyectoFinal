@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load colaborador_tags %}
 
 {% block title %}CyberShield - Lista de Usuarios{% endblock %}
 
@@ -19,7 +20,6 @@
         color: var(--primary-color);
         font-size: 2.5rem;
         margin-bottom: 1.5rem;
-        text-align: center;
         text-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
     }
     .user-list {
@@ -102,57 +102,50 @@
         text-align: center;
         font-style: italic;
     }
+    .unauthorized-message {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 100px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container user-list-container">
-    <h1 class="user-list-title">Lista de Usuarios</h1>
-    {% if usuarios %}
-        <ul class="user-list">
-            {% for usuario in usuarios %}
-                <li class="user-item">
-                    <div class="user-info">
-                        <span class="user-name">{{ usuario.username }}</span>
-                        <span class="user-email">{{ usuario.email }}</span>
-                    </div>
-                    <div class="user-type">
-                        {% if usuario.groups.all %}
-                            {% for group in usuario.groups.all %}
-                                {% if group.name == 'Colaborador' %}
-                                    <span class="badge bg-success">Colaborador</span>
-                                {% elif group.name == 'Registrado' %}
-                                    <span class="badge bg-info">Registrado</span>
-                                {% endif %}
-                            {% endfor %}
-                        {% else %}
-                            <span class="badge bg-secondary">Sin grupo</span>
-                        {% endif %}
-                    </div>
-                    <div class="user-actions">
-                        <a href="{% url 'apps.usuario:usuario_update' usuario.id %}" class="btn-update">
-                            <i class="fas fa-edit"></i> Modificar
-                        </a>
-                        <a href="{% url 'apps.usuario:usuario_delete' usuario.id %}" class="btn-delete">
-                            <i class="fas fa-trash-alt"></i> Eliminar
-                        </a>
-                        <form method="post" action="{% url 'apps.usuario:cambiar_rol' usuario.id %}" class="d-inline">
-                            {% csrf_token %}
-                            <select name="rol" class="role-select" onchange="this.form.submit()">
-                                <option value="">Rol actual</option>
-                                <option value="Registrado" {% if 'Registrado' in usuario.groups.all|stringformat:"s" %}selected{% endif %}>Registrado</option>
-                                <option value="Colaborador" {% if 'Colaborador' in usuario.groups.all|stringformat:"s" %}selected{% endif %}>Colaborador</option>
-                            </select>
-                            <button type="submit" class="btn-change-role">
-                                <i class="fas fa-user-tag"></i> Cambiar rol
-                            </button>
-                        </form>
-                    </div>
-                </li>
-            {% endfor %}
-        </ul>
+<div class="container">
+    {% if is_authorized %}
+        <div class="user-list-container">
+            <h1 class="user-list-title text-center">Lista de Usuarios</h1>
+            <table class="user-table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Email</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.username }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>{{ usuario.first_name }}</td>
+                        <td>{{ usuario.last_name }}</td>
+                        <td>
+                            <a href="{% url 'apps.usuario:usuario_update' pk=usuario.pk %}" class="user-action-btn">Editar</a>
+                            <a href="{% url 'apps.usuario:usuario_delete' pk=usuario.pk %}" class="user-action-btn">Eliminar</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     {% else %}
-        <p class="no-users">No hay usuarios registrados.</p>
+        <div class="unauthorized-message">
+            <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+        </div>
     {% endif %}
 </div>
 {% endblock %}

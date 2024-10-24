@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load colaborador_tags %}
 
 {% block title %}CyberShield - Modificar Post{% endblock %}
 
@@ -61,23 +62,35 @@
         background-color: var(--hover-color);
         box-shadow: 0 0 15px var(--primary-color);
     }
+    .unauthorized-message {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 100px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="modify-post-container">
-        <h1 class="modify-post-title text-center">Modificar Post</h1>
-        <div class="text-center">
-            <a href="{% url 'apps.posts:crear_categoria' %}?next={% url 'apps.posts:post_update' pk=object.id %}" class="modify-category-btn">Modificar Categoría</a>
-        </div>
-        <form method="post" enctype="multipart/form-data" class="post-form">
-            {% csrf_token %}
-            {{ form.as_p }}
+    {% if user.is_superuser or user|has_group:'Colaborador' or post.autor == user %}
+        <div class="modify-post-container">
+            <h1 class="modify-post-title text-center">Modificar Post</h1>
             <div class="text-center">
-                <input type="submit" value="Guardar cambios">
+                <a href="{% url 'apps.posts:crear_categoria' %}?next={% url 'apps.posts:post_update' pk=object.id %}" class="modify-category-btn">Modificar Categoría</a>
             </div>
-        </form>
-    </div>
+            <form method="post" enctype="multipart/form-data" class="post-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="text-center">
+                    <input type="submit" value="Guardar cambios">
+                </div>
+            </form>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

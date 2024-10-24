@@ -109,7 +109,7 @@
                 {{ post.texto|safe }}
             </div>
 
-            {% if user.is_superuser or request.user|has_group:'Colaborador' %}
+            {% if user.is_superuser or user|has_group:'Colaborador' or post.autor == user %}
             <div class="post-actions">
                 <a href="{% url 'apps.posts:post_update' pk=post.id %}" class="post-action-btn">Modificar Post</a>
                 <a href="{% url 'apps.posts:post_delete' pk=post.id %}" class="post-action-btn">Eliminar Post</a>

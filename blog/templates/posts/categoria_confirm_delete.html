@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load colaborador_tags %}
 
 {% block title %}CyberShield - Confirmar Eliminación de Categoría{% endblock %}
 
@@ -58,19 +59,31 @@
         background-color: var(--hover-color);
         box-shadow: 0 0 15px var(--primary-color);
     }
+    .unauthorized-message {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 100px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="delete-category-container">
-        <h1 class="delete-category-title">Eliminar Categoría</h1>
-        <p class="delete-category-message">¿Estás seguro de que deseas eliminar la categoría "{{ object.nombre }}"?</p>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="delete-btn">Sí, eliminar</button>
-            <a href="{% url 'apps.posts:categoria_list' %}" class="cancel-btn">No, cancelar</a>
-        </form>
-    </div>
+    {% if user.is_superuser or user|has_group:'Colaborador' %}
+        <div class="delete-category-container">
+            <h1 class="delete-category-title">Eliminar Categoría</h1>
+            <p class="delete-category-message">¿Estás seguro de que deseas eliminar la categoría "{{ object.nombre }}"?</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Sí, eliminar</button>
+                <a href="{% url 'apps.posts:categoria_list' %}" class="cancel-btn">No, cancelar</a>
+            </form>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

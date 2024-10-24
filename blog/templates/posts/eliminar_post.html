@@ -52,19 +52,31 @@
         background-color: var(--hover-color);
         box-shadow: 0 0 15px var(--primary-color);
     }
+    .unauthorized-message {
+        color: var(--text-color);
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 100px;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <div class="delete-post-container">
-        <h2 class="delete-post-title text-center">Eliminar Post</h2>
-        <p class="delete-post-message text-center">¿Estás seguro de que quieres eliminar el post "{{ object.titulo }}"?</p>
-        <form method="post" class="text-center">
-            {% csrf_token %}
-            <button type="submit" class="delete-btn">Sí, eliminar</button>
-            <a href="{% url 'apps.posts:post_individual' id=object.id %}" class="cancel-btn">Cancelar</a>
-        </form>
-    </div>
+    {% if user.is_superuser or user|has_group:'Colaborador' or object.autor == user %}
+        <div class="delete-post-container">
+            <h2 class="delete-post-title text-center">Eliminar Post</h2>
+            <p class="delete-post-message text-center">¿Estás seguro de que quieres eliminar el post "{{ object.titulo }}"?</p>
+            <form method="post" class="text-center">
+                {% csrf_token %}
+                <button type="submit" class="delete-btn">Sí, eliminar</button>
+                <a href="{% url 'apps.posts:post_individual' id=object.id %}" class="cancel-btn">Cancelar</a>
+            </form>
+        </div>
+    {% else %}
+        <div class="text-center">
+            <h1 class="unauthorized-message">Solo usuarios con permisos pueden acceder a esta página</h1>
+        </div>
+    {% endif %}
 </div>
 {% endblock %}

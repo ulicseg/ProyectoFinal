@@ -12,7 +12,7 @@
                         <span class="comment-date">{{ comentario.fecha|date:"d/m/Y H:i" }}</span>
                     </div>
                     <p class="comment-text">{{ comentario.texto }}</p>
-                    {% if user.is_superuser or comentario.usuario == user %}
+                    {% if user.is_superuser or user|has_group:"Colaborador" or comentario.usuario == user %}
                         <a href="{% url 'apps.comentario:comentario_confirm_delete' pk=comentario.pk %}" class="delete-comment-btn">Eliminar</a>
                     {% endif %}
                 </div>
