@@ -22,3 +22,10 @@ class LoginForm(forms.Form):
         if user:
             login(request, user)
     
+
+class CambiarRolForm(forms.Form):
+    ROL_CHOICES = [
+        ('Registrado', 'Registrado'),
+        ('Colaborador', 'Colaborador'),
+    ]
+    rol = forms.ChoiceField(choices=ROL_CHOICES)

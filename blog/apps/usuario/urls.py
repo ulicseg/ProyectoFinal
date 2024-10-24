@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 from .views import *
 from django.contrib.auth import views as auth_views
+from .views import EditarPerfilView
+from .views import CambiarRolView
 
 
 app_name = 'apps.usuario'
@@ -17,4 +19,6 @@ urlpatterns = [
     path('usuario/', UsuarioListView.as_view(), name='usuario_list'),
     path('usuario/<int:pk>/actualizar/', UsuarioUpdateView.as_view(), name='usuario_update'),
     path('usuario/<int:pk>/eliminar/', UsuarioDeleteView.as_view(), name='usuario_delete'),
+    path('editar-perfil/<int:pk>/', EditarPerfilView.as_view(), name='editar_perfil'),
+    path('usuario/<int:pk>/cambiar-rol/', CambiarRolView.as_view(), name='cambiar_rol'),
 ]

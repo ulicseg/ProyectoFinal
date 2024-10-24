@@ -58,13 +58,16 @@
     .user-actions {
         display: flex;
         gap: 0.5rem;
+        align-items: center;
     }
-    .btn-update, .btn-delete {
+    .btn-update, .btn-delete, .btn-change-role {
         padding: 0.3rem 0.6rem;
         border-radius: 3px;
         text-decoration: none;
         font-weight: bold;
         transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
     }
     .btn-update {
         background-color: #007bff;
@@ -74,8 +77,25 @@
         background-color: #dc3545;
         color: white;
     }
-    .btn-update:hover, .btn-delete:hover {
+    .btn-change-role {
+        background-color: #28a745;
+        color: white;
+    }
+    .btn-update:hover, .btn-delete:hover, .btn-change-role:hover {
         box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+        opacity: 0.9;
+    }
+    .role-select {
+        background-color: rgba(0, 26, 0, 0.8);
+        color: var(--text-color);
+        border: 1px solid var(--primary-color);
+        border-radius: 3px;
+        padding: 0.3rem;
+        font-size: 0.9rem;
+    }
+    .role-select:focus {
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
     }
     .no-users {
         color: var(--text-color);
@@ -113,11 +133,20 @@
                         <a href="{% url 'apps.usuario:usuario_update' usuario.id %}" class="btn-update">
                             <i class="fas fa-edit"></i> Modificar
                         </a>
-                    </div>
-                    <div class="user-actions">
                         <a href="{% url 'apps.usuario:usuario_delete' usuario.id %}" class="btn-delete">
                             <i class="fas fa-trash-alt"></i> Eliminar
                         </a>
+                        <form method="post" action="{% url 'apps.usuario:cambiar_rol' usuario.id %}" class="d-inline">
+                            {% csrf_token %}
+                            <select name="rol" class="role-select" onchange="this.form.submit()">
+                                <option value="">Rol actual</option>
+                                <option value="Registrado" {% if 'Registrado' in usuario.groups.all|stringformat:"s" %}selected{% endif %}>Registrado</option>
+                                <option value="Colaborador" {% if 'Colaborador' in usuario.groups.all|stringformat:"s" %}selected{% endif %}>Colaborador</option>
+                            </select>
+                            <button type="submit" class="btn-change-role">
+                                <i class="fas fa-user-tag"></i> Cambiar rol
+                            </button>
+                        </form>
                     </div>
                 </li>
             {% endfor %}

@@ -1,13 +1,14 @@
-from .forms import RegistroUsuarioForm
-from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic import CreateView, ListView, DetailView, DeleteView, UpdateView
+from .forms import RegistroUsuarioForm, CambiarRolForm
+from django.contrib.auth.views import LoginView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView
 from django.contrib import messages
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.models import Group
 from django.views import View
 from django.contrib.auth import logout
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.exceptions import PermissionDenied
 from apps.posts.models import Post
 from apps.comentario.models import Comentario
 from .models import Usuario
@@ -46,11 +47,16 @@ class LogoutUsuario(View):
 
         return reverse('apps.usuario:login')
     
-class UsuarioListView(LoginRequiredMixin,ListView):
+class UsuarioListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Usuario
     template_name = 'usuario/usuario_list.html'
     context_object_name = 'usuarios'
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.groups.filter(name__in=['Administrador', 'Colaborador']).exists()
+
+    def handle_no_permission(self):
+        raise PermissionDenied("No tienes permiso para ver esta página.")
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -97,3 +103,32 @@ class UsuarioUpdateView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, f'Usuario {form.instance.username} actualizado correctamente')
         return super().form_valid(form)
+
+class EditarPerfilView(LoginRequiredMixin, UpdateView):
+    model = Usuario
+    template_name = 'usuario/editar_perfil.html'
+    fields = ['username', 'email', 'first_name', 'last_name']
+    success_url = reverse_lazy('apps.usuario:perfil')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Perfil actualizado correctamente.')
+        return super().form_valid(form)
+
+# Agregar nueva vista para cambiar rol
+class CambiarRolView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.groups.filter(name__in=['Administrador', 'Colaborador']).exists()
+
+    def post(self, request, pk):
+        usuario = get_object_or_404(Usuario, pk=pk)
+        form = CambiarRolForm(request.POST)
+        if form.is_valid():
+            nuevo_rol = form.cleaned_data['rol']
+            usuario.groups.clear()
+            grupo = Group.objects.get(name=nuevo_rol)
+            usuario.groups.add(grupo)
+            messages.success(request, f'Rol de {usuario.username} cambiado a {nuevo_rol}')
+        return redirect('apps.usuario:usuario_list')

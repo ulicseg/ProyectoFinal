@@ -189,7 +189,7 @@
                             <i class="fas fa-user-circle"></i> {{ user.username }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-user-edit"></i> Editar perfil</a></li>
+                            <li><a class="dropdown-item" href="{% url 'apps.usuario:editar_perfil' user.pk %}"><i class="fas fa-user-edit"></i> Editar perfil</a></li>
                             {% if user.is_superuser or request.user|has_group:'Colaborador' %}
                             <li><a class="dropdown-item" href="{% url 'apps.usuario:usuario_list' %}"><i class="fas fa-users"></i> Lista de usuarios</a></li>
                             {% endif %}

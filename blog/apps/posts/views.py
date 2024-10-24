@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from apps.comentario.models import Comentario 
+from django.http import Http404
 
 # Create your views here.
 
@@ -110,11 +111,16 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         form.fields['imagen'].required = False
         return form
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     template_name = 'posts/eliminar_post.html'
     success_url = reverse_lazy('apps.posts:posts')
 
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.object.autor != request.user:
+            raise Http404("Página no encontrada")
+        return super().dispatch(request, *args, **kwargs)
 
 class PostPorCategoriaView(ListView):
     model = Post
