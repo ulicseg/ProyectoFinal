@@ -35,8 +35,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ulielian@outlook.com'
-EMAIL_HOST_PASSWORD = 'ulises44086174'
+EMAIL_HOST_USER = 'cybershieldsoporte@gmail.com'
+EMAIL_HOST_PASSWORD = 'zadysjwrsxmvheub'
 
 SITE_NAME = 'CyberShield'
 
@@ -98,9 +98,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
            'NAME': 'base_proyecto',
            'USER': 'root',
-           'PASSWORD': '1234',
-           'HOST': 'localhost',  # O la dirección de tu servidor MySQL
-           'PORT': '3306',       # Puerto por defecto de MySQL
+           'PASSWORD': 'root',
+           'HOST': 'localhost', 
+           'PORT': '3306',       
     }
 }
 
