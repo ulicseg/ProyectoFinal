@@ -14,8 +14,7 @@ __pycache__/
 
 # Django
 *.log
-db.sqlite3
-db.sqlite3-journal
+
 
 
 # Archivos de sistema
@@ -31,6 +30,10 @@ Thumbs.db
 # Archivos de migración, excepto __init__.py
 **/migrations/*.py
 !**/migrations/__init__.py
+
+# Ignorar todas las carpetas de migraciones
+**/migrations/
+
 
 # Archivos estáticos recopilados
 static/
@@ -69,3 +72,4 @@ docs/_build/
 *.bak
 *.tmp
 *.temp
+
