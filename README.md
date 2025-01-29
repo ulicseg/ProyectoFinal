@@ -1,9 +1,4 @@
 PROYECTO FINAL INFORMATORIO "CYBERSHIELD" 2024.
-GRUPO 1:
-  INTEGRANTES:
-    1. Ulises Gutierrez.
-    2. Nicolas Gomez.
-    3. Danilo Benitez.
 
 ACCESO A ADMIN:
 https://cybershield11.pythonanywhere.com/administradorsupersecreto
